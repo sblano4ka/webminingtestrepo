@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class WeatherHistory {
     private static final String KEY = "fb2d96034d2a3399";
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     private Map<String, String> cityRequest;
 
     public WeatherHistory() {

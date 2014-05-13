@@ -1,0 +1,20 @@
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <title>Fake ${page_title} </title>
+
+        <%--CSS FILES--%>
+        <link rel="stylesheet" href="<c:url value='/css/bootstrap.css' />"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+        <%--JAVASCRIPT FILES--%>
+        <script type="text/javascript" src="<c:url value='/js/jquery-1.9.1.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/js/bootstrap.min.js' />"></script>
+
+    </head>
+

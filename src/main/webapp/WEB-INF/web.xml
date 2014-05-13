@@ -6,6 +6,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
 
+    <welcome-file-list>
+        <welcome-file>/</welcome-file>
+    </welcome-file-list>
+
     <!-- Spring MVC -->
     <servlet>
         <servlet-name>mvc-dispatcher</servlet-name>
@@ -24,6 +28,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
+            /WEB-INF/applicationContext.xml
             /WEB-INF/mvc-dispatcher-servlet.xml
         </param-value>
     </context-param>
