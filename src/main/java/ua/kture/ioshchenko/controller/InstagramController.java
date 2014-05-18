@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.kture.ioshchenko.api.InstagramAPI;
 
+import java.io.IOException;
+
 @Controller
 public class InstagramController {
 
@@ -23,8 +25,13 @@ public class InstagramController {
     @RequestMapping(value = "/instagram/accesss", method = RequestMethod.GET)
     public String getAccessCode(@RequestParam String code, Model model) {
 
-        String token = instagramAPI.getAccessToken(code);
-         model.addAttribute("inst",token) ;
+        String token = null;
+        try {
+            token = instagramAPI.getAccessToken(code);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("inst",token) ;
 
         return "drop_box_authorize";
     }

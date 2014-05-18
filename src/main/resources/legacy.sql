@@ -8,3 +8,12 @@ CREATE TABLE users(
     UNIQUE (id),
     UNIQUE (email)
 );
+
+DROP TABLE IF EXISTS events;
+
+CREATE TABLE events(
+    id int(6) PRIMARY KEY AUTO_INCREMENT,
+    date DATE ,
+    message varchar(300),
+    UNIQUE (id)
+);

@@ -2,9 +2,8 @@ package ua.kture.ioshchenko.api;
 
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -20,19 +19,19 @@ public class InstagramAPI {
         StringBuilder url = new StringBuilder("https://api.instagram.com/oauth/authorize/?client_id=");
         url.append(CLENT_ID)
                 .append("&redirect_uri=").append(REDIRECT_URL)
-                .append("&response_type=code");
+                .append("&response_type=token");
         authUrl = url.toString();
     }
 
-    public String getAccessToken(String code) {
-        URL url ;
-        HttpURLConnection httpURLConnection;
+    public String getAccessToken(String code) throws IOException {
+/*        URL url ;
+        HttpsURLConnection httpURLConnection;
         BufferedReader bufferedReader;
         String line;
         StringBuilder result = new StringBuilder();
         try {
             url = new URL("https://api.instagram.com/oauth/access_token");
-            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection = (HttpsURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("client_id", CLENT_ID);
             httpURLConnection.setRequestProperty("client_secret", CLIENT_SECRET);
@@ -49,7 +48,48 @@ public class InstagramAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result.toString();
+        return result.toString();*/
+        return getToken(code);
+
+    }
+
+    private String getToken(String code) throws IOException {
+        String httpsURL = "https://api.instagram.com/oauth/access_token";
+
+        StringBuilder query = new StringBuilder();
+        query.append("client_id=").append(CLENT_ID).append("&")
+                .append("client_secret=").append(CLIENT_SECRET).append("&")
+                .append("grant_type=authorization_code").append("&")
+                .append("redirect_uri=").append(REDIRECT_URL).append("&")
+                .append("code=").append(code);
+
+        URL myurl = new URL(httpsURL);
+        HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
+        con.setRequestMethod("POST");
+
+        con.setRequestProperty("Content-length", String.valueOf(query.length()));
+        con.setRequestProperty("Content-Type", "application/x-www- form-urlencoded");
+        con.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0;Windows98;DigExt)");
+        con.setDoOutput(true);
+        con.setDoInput(true);
+
+        DataOutputStream output = new DataOutputStream(con.getOutputStream());
+
+
+        output.writeBytes(query.toString());
+
+        output.close();
+
+        DataInputStream input = new DataInputStream(con.getInputStream());
+
+
+        for (int c = input.read(); c != -1; c = input.read())
+            System.out.print((char) c);
+        input.close();
+
+        System.out.println("Resp Code:" + con.getResponseCode());
+        System.out.println("Resp Message:" + con.getResponseMessage());
+        return con.getResponseMessage();
     }
 
     public String getAuthUrl() {
