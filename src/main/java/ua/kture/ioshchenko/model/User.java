@@ -2,18 +2,16 @@ package ua.kture.ioshchenko.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "users")
+
 public class User {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+
     private long id;
-    @Column
+
     private String email;
-    @Column
+
     private String password;
-    @Column
+
     private String dropBoxAccessToken;
 
 
