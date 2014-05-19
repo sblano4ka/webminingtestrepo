@@ -10,35 +10,22 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class DBManager {
-    private static DBManager instance;
-    private DataSource dataSource;
-    private Logger logger = Logger.getLogger(DBManager.class);
+	private static DBManager instance;
 
-    private DBManager() {
-        Context context;
-        try {
-            context = new InitialContext();
-            dataSource = (DataSource) context
-                    .lookup("java:comp/env/jdbc/mysqldb");
-        } catch (NamingException e) {
-            logger.error("Not find context for database.", e);
-        }
+	@Autowired
+	private DataSource dataSource;
+	private Logger logger = Logger.getLogger(DBManager.class);
 
-    }
+	public Connection getConnection() throws SQLException,
+			ClassNotFoundException {
 
-    public static synchronized DBManager getInstance() {
-        if (instance == null)
-            instance = new DBManager();
-        return instance;
-    }
+		return dataSource.getConnection();
 
-    public Connection getConnection() throws SQLException,
-            ClassNotFoundException {
-
-        return dataSource.getConnection();
-
-    }
+	}
 
 }
