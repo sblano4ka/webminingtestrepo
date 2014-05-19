@@ -1,11 +1,24 @@
 package ua.kture.ioshchenko.api;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.json.simple.parser.JSONParser;
+import org.apache.http.entity.StringEntity;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class InstagramAPI {
@@ -14,6 +27,9 @@ public class InstagramAPI {
     private static final String REDIRECT_URL = "http://fake-ioschenko.rhcloud.com/instagram/accesss";
 
     private String authUrl;
+
+
+    private Logger log = Logger.getLogger(InstagramAPI.class) ;
 
     public InstagramAPI() {
         StringBuilder url = new StringBuilder("https://api.instagram.com/oauth/authorize/?client_id=");
@@ -24,73 +40,51 @@ public class InstagramAPI {
     }
 
     public String getAccessToken(String code) throws IOException {
-/*        URL url ;
-        HttpsURLConnection httpURLConnection;
-        BufferedReader bufferedReader;
-        String line;
-        StringBuilder result = new StringBuilder();
+        log.info("**************  Start API  **************");
+        HttpPost httpPost = null;
+        JSONObject json = null;
+
         try {
-            url = new URL("https://api.instagram.com/oauth/access_token");
-            httpURLConnection = (HttpsURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("client_id", CLENT_ID);
-            httpURLConnection.setRequestProperty("client_secret", CLIENT_SECRET);
-            httpURLConnection.setRequestProperty("grant_type", "authorization_code");
-            httpURLConnection.setRequestProperty("redirect_uri", REDIRECT_URL);
-            httpURLConnection.setRequestProperty("code", code);
-            bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            while ((line = bufferedReader.readLine()) != null) {
-                result.append(line);
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            httpPost = new HttpPost("https://api.instagram.com/oauth/access_token");
+            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+
+            nvps.add(new BasicNameValuePair("client_id", CLENT_ID));
+            nvps.add(new BasicNameValuePair("client_secret", CLIENT_SECRET));
+            nvps.add(new BasicNameValuePair("grant_type", "authorization_code"));
+            nvps.add(new BasicNameValuePair("redirect_uri", REDIRECT_URL));
+            nvps.add(new BasicNameValuePair("code", code));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            HttpResponse response = httpclient.execute(httpPost);
+
+            System.out.println(response.getStatusLine());
+            System.out.println(response.toString());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+            StringBuilder builder = new StringBuilder();
+            for (String line = null; (line = reader.readLine()) != null; ) {
+                builder.append(line).append("\n");
             }
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            System.out.println(builder.toString());
+
+            json = (JSONObject) new JSONParser().parse(builder.toString());
+            log.info("--->>> "+ json);
+
+            EntityUtils.consume(response.getEntity());
+
+        } catch (Exception ex) {
+                log.error("Instagram api", ex);
+        } finally {
+            httpPost.releaseConnection();
+
         }
-        return result.toString();*/
-        return getToken(code);
+
+        return json.toString();
 
     }
 
-    private String getToken(String code) throws IOException {
-        String httpsURL = "https://api.instagram.com/oauth/access_token";
-
-        StringBuilder query = new StringBuilder();
-        query.append("client_id=").append(CLENT_ID).append("&")
-                .append("client_secret=").append(CLIENT_SECRET).append("&")
-                .append("grant_type=authorization_code").append("&")
-                .append("redirect_uri=").append(REDIRECT_URL).append("&")
-                .append("code=").append(code);
-
-        URL myurl = new URL(httpsURL);
-        HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
-        con.setRequestMethod("POST");
-
-        con.setRequestProperty("Content-length", String.valueOf(query.length()));
-        con.setRequestProperty("Content-Type", "application/x-www- form-urlencoded");
-        con.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0;Windows98;DigExt)");
-        con.setDoOutput(true);
-        con.setDoInput(true);
-
-        DataOutputStream output = new DataOutputStream(con.getOutputStream());
-
-
-        output.writeBytes(query.toString());
-
-        output.close();
-
-        DataInputStream input = new DataInputStream(con.getInputStream());
-
-
-        for (int c = input.read(); c != -1; c = input.read())
-            System.out.print((char) c);
-        input.close();
-
-        System.out.println("Resp Code:" + con.getResponseCode());
-        System.out.println("Resp Message:" + con.getResponseMessage());
-        return con.getResponseMessage();
-    }
 
     public String getAuthUrl() {
         return authUrl;

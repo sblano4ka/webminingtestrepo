@@ -28,10 +28,11 @@ public class InstagramController {
         String token = null;
         try {
             token = instagramAPI.getAccessToken(code);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        model.addAttribute("inst",token) ;
+        model.addAttribute("inst", token);
 
         return "drop_box_authorize";
     }
