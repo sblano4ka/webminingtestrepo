@@ -18,7 +18,7 @@ public class InstagramAPI {
     private static final String CLENT_ID = "883cf7e7219848a59b1b0fe295ddf549";
     private static final String CLIENT_SECRET = "9d0585ac55e146e1877e5c1b694ffb64";
     private static final String REDIRECT_URL = "http://fake-ioschenko.rhcloud.com/instagram/accesss";
-
+       // String s= "{\"access_token\":\"1173560565.883cf7e.aa084995ac714068a3b3d14cc6c473ff\",\"user\":{\"username\":\"ivan_ioshchenko\",\"bio\":\"\",\"website\":\"\",\"profile_picture\":\"http:\\/\\/images.ak.instagram.com\\/profiles\\/anonymousUser.jpg\",\"full_name\":\"\",\"id\":\"1173560565\"}}";
     private String authUrl;
 
     private Logger log = Logger.getLogger(InstagramAPI.class);

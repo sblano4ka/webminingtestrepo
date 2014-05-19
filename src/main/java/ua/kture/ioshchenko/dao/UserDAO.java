@@ -18,7 +18,7 @@ import ua.kture.ioshchenko.model.User;
 public interface UserDAO {
     public void add(User user);
 
-    public User get(String email, String password);
+    public User get(String email);
 
     public void update(User user);
 }
