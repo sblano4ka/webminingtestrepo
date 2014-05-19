@@ -32,7 +32,7 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(2, user.getPassword());
 
 			pstmt.executeUpdate();
-			connection.commit();
+			
 		} catch (Exception ex) {
 
 			logger.error("Not add user.", ex);
@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 			if (rs.next()) {
 				user = unMap(rs);
 			}
-			connection.commit();
+			
 		} catch (Exception e) {
 			logger.error("Not get user.", e);
 			rollback(connection);
