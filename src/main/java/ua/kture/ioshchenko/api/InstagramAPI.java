@@ -35,7 +35,7 @@ public class InstagramAPI {
         StringBuilder url = new StringBuilder("https://api.instagram.com/oauth/authorize/?client_id=");
         url.append(CLENT_ID)
                 .append("&redirect_uri=").append(REDIRECT_URL)
-                .append("&response_type=token");
+                .append("&response_type=code");
         authUrl = url.toString();
     }
 
