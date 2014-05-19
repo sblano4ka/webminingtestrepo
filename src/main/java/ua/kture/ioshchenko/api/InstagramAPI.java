@@ -42,7 +42,7 @@ public class InstagramAPI {
     public String getAccessToken(String code) throws IOException {
         log.info("**************  Start API  **************");
         HttpPost httpPost = null;
-        JSONObject json = null;
+        StringBuilder builder = new StringBuilder();
 
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -57,21 +57,18 @@ public class InstagramAPI {
 
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
             HttpResponse response = httpclient.execute(httpPost);
-
-            System.out.println(response.getStatusLine());
-            System.out.println(response.toString());
+           
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-            StringBuilder builder = new StringBuilder();
+           
             for (String line = null; (line = reader.readLine()) != null; ) {
                 builder.append(line).append("\n");
             }
 
-            System.out.println(builder.toString());
+            //System.out.println(builder.toString());
 
-            json = (JSONObject) new JSONParser().parse(builder.toString());
-            log.info("--->>> "+ json);
-
+            //json = (JSONObject) new JSONParser().parse(builder.toString());
+            
             EntityUtils.consume(response.getEntity());
 
         } catch (Exception ex) {
@@ -81,7 +78,7 @@ public class InstagramAPI {
 
         }
 
-        return json.toString();
+        return builder.toString();
 
     }
 
