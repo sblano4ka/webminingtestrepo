@@ -12,7 +12,9 @@ import ua.kture.ioshchenko.api.InstagramAPI;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 
@@ -39,7 +41,7 @@ public class InstagramController {
             String token = null;
             try {
                 token = instagramAPI.getAccessToken(code);
-                instagramAPI.createSubscriptions("verify123");
+                //instagramAPI.createSubscriptions("verify123");
 
             } catch (IOException e) {
                 log.error("Access token error", e);
@@ -57,15 +59,16 @@ public class InstagramController {
     }
 
     @RequestMapping(value = "/instagram/accesss", method = RequestMethod.POST)
-    public void success(HttpServletRequest request) {
-        log.info("   Success REGISTRATION ---->>");
+    public void success(HttpServletRequest request) throws IOException {
+        log.info("User public photo ---->>");
 
-        Enumeration<String> parameterNames = request.getParameterNames();
-
-        while (parameterNames.hasMoreElements()) {
-            String paramName = parameterNames.nextElement();
-            log.info("PARAMETR -->> " + paramName);
+        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        StringBuilder json = new StringBuilder();
+        if (br != null) {
+            json.append(br.readLine());
         }
+
+        log.info("JSON -->>  " + json.toString());
 
     }
 
