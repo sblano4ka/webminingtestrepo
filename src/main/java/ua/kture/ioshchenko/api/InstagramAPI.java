@@ -20,7 +20,7 @@ public class InstagramAPI {
     private static final String CLENT_ID = "883cf7e7219848a59b1b0fe295ddf549";
     private static final String CLIENT_SECRET = "9d0585ac55e146e1877e5c1b694ffb64";
     private static final String REDIRECT_URL = "http://fake-ioschenko.rhcloud.com/instagram/accesss";
-    private static final String SUBSCRIPTIONS_URL = " https://api.instagram.com/v1/subscriptions/";
+    private static final String SUBSCRIPTIONS_URL = "https://api.instagram.com/v1/subscriptions/";
     private static final String ACCESS_TOKEN_URL = "https://api.instagram.com/oauth/access_token";
 
     private String authUrl;
@@ -101,9 +101,7 @@ public class InstagramAPI {
 
     }
 
-    public void sendHubChallenge(String chalenge){
 
-    }
 
     public String getAuthUrl() {
         return authUrl;
