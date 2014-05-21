@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.kture.ioshchenko.api.InstagramAPI;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 @Controller
 public class InstagramController {
@@ -44,7 +46,7 @@ public class InstagramController {
             }
             model.addAttribute("inst", token);
         } else try {
-            log.info("HUB --->>> " + chalenge + "  verify toke: "+ verifyToken);
+            log.info("HUB --->>> " + chalenge + "  verify toke: " + verifyToken);
             PrintWriter out = response.getWriter();
             out.print(chalenge);
             out.flush();
@@ -55,8 +57,15 @@ public class InstagramController {
     }
 
     @RequestMapping(value = "/instagram/accesss", method = RequestMethod.POST)
-    public void success() {
+    public void success(HttpServletRequest request) {
         log.info("   Success REGISTRATION ---->>");
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            log.info("PARAMETR -->> " + paramName);
+        }
 
     }
 
