@@ -70,8 +70,9 @@ public class InstagramAPI {
         }
         JSONObject jsonObject = new JSONObject(builder.toString());
 
-        /*JSONObject u = jsonObject.getJSONObject("user");
-        System.out.println(u.get("id"));*/
+        JSONObject u = jsonObject.getJSONObject("user");
+        log.info("USER ID -->> " + u.get("id"));
+
         return jsonObject.get("access_token").toString();
     }
 
@@ -100,7 +101,6 @@ public class InstagramAPI {
         }
 
     }
-
 
 
     public String getAuthUrl() {
