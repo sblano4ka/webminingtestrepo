@@ -8,7 +8,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,9 @@ public class InstagramAPI {
     private static final String CLENT_ID = "883cf7e7219848a59b1b0fe295ddf549";
     private static final String CLIENT_SECRET = "9d0585ac55e146e1877e5c1b694ffb64";
     private static final String REDIRECT_URL = "http://fake-ioschenko.rhcloud.com/instagram/accesss";
-       // String s= "{\"access_token\":\"1173560565.883cf7e.aa084995ac714068a3b3d14cc6c473ff\",\"user\":{\"username\":\"ivan_ioshchenko\",\"bio\":\"\",\"website\":\"\",\"profile_picture\":\"http:\\/\\/images.ak.instagram.com\\/profiles\\/anonymousUser.jpg\",\"full_name\":\"\",\"id\":\"1173560565\"}}";
+    private static final String SUBSCRIPTIONS_URL = " https://api.instagram.com/v1/subscriptions/";
+    private static final String ACCESS_TOKEN_URL = "https://api.instagram.com/oauth/access_token";
+
     private String authUrl;
 
     private Logger log = Logger.getLogger(InstagramAPI.class);
@@ -37,8 +41,7 @@ public class InstagramAPI {
 
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            httpPost = new HttpPost(
-                    "https://api.instagram.com/oauth/access_token");
+            httpPost = new HttpPost(ACCESS_TOKEN_URL);
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 
             nvps.add(new BasicNameValuePair("client_id", CLENT_ID));
@@ -65,8 +68,40 @@ public class InstagramAPI {
             httpPost.releaseConnection();
 
         }
+        JSONObject jsonObject = new JSONObject(builder.toString());
 
-        return builder.toString();
+        /*JSONObject u = jsonObject.getJSONObject("user");
+        System.out.println(u.get("id"));*/
+        return jsonObject.get("access_token").toString();
+    }
+
+    public void createSubscriptions(String verifyToken) {
+        HttpPost httpPost = null;
+
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            httpPost = new HttpPost(SUBSCRIPTIONS_URL);
+            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+
+            nvps.add(new BasicNameValuePair("client_id", CLENT_ID));
+            nvps.add(new BasicNameValuePair("client_secret", CLIENT_SECRET));
+            nvps.add(new BasicNameValuePair("object", "user"));
+            nvps.add(new BasicNameValuePair("aspect", "media"));
+            nvps.add(new BasicNameValuePair("verify_token", verifyToken));
+            nvps.add(new BasicNameValuePair("callback_url", REDIRECT_URL));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            httpclient.execute(httpPost);
+
+        } catch (Exception ex) {
+            log.error("Instagram api create subscriptions", ex);
+        } finally {
+            httpPost.releaseConnection();
+        }
+
+    }
+
+    public void sendHubChallenge(String chalenge){
 
     }
 
