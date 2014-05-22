@@ -1,18 +1,13 @@
 package ua.kture.ioshchenko.model;
 
-import javax.persistence.*;
-
-
 public class User {
 
-
     private long id;
-
     private String email;
-
     private String password;
-
     private String dropBoxAccessToken;
+    private String instagramAccessToken;
+    private String instagramUserId;
 
 
     public long getId() {
@@ -45,6 +40,22 @@ public class User {
 
     public void setDropBoxAccessToken(String dropBoxAccessToken) {
         this.dropBoxAccessToken = dropBoxAccessToken;
+    }
+
+    public String getInstagramAccessToken() {
+        return instagramAccessToken;
+    }
+
+    public void setInstagramAccessToken(String instagramAccessToken) {
+        this.instagramAccessToken = instagramAccessToken;
+    }
+
+    public String getInstagramUserId() {
+        return instagramUserId;
+    }
+
+    public void setInstagramUserId(String instagramUserId) {
+        this.instagramUserId = instagramUserId;
     }
 
     @Override

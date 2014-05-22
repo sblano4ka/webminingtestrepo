@@ -10,127 +10,156 @@ import java.sql.*;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
-	private final String FIND_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?;";
-	private final String INSERT_USER = "INSERT INTO users VALUES (default, ?, ?);";
-	private final String UPDATE_USER = "UPDATE users SET password=? WHERE email=?";
-	private final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private final Logger logger = Logger.getLogger(UserDAOImpl.class);
 
-	@Autowired
-	private DBManager manager;
+    private final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?;";
+    private final String INSERT_USER = "INSERT INTO(id,email,password) users VALUES (default, ?, ?);";
+    private final String UPDATE_USER = "UPDATE users SET drop_box_access_token=?, " +
+            "instagram_access_token=?, instagram_user_id=? WHERE email=?";
 
-	@Override
-	public void add(User user) {
-		PreparedStatement pstmt = null;
-		Connection connection = null;
 
-		try {
+    @Autowired
+    private DBManager manager;
 
-			connection = manager.getConnection();
+    @Override
+    public void add(User user) {
+        PreparedStatement pstmt = null;
+        Connection connection = null;
 
-			pstmt = connection.prepareStatement(INSERT_USER);
-			pstmt.setString(1, user.getEmail());
-			pstmt.setString(2, user.getPassword());
+        try {
 
-			pstmt.executeUpdate();
-			
-		} catch (Exception ex) {
+            connection = manager.getConnection();
 
-			logger.error("Not add user.", ex);
-			rollback(connection);
+            pstmt = connection.prepareStatement(INSERT_USER);
+            pstmt.setString(1, user.getEmail());
+            pstmt.setString(2, user.getPassword());
 
-		} finally {
-			closePreparedStatement(connection, pstmt, null);
-		}
+            pstmt.executeUpdate();
 
-	}
+        } catch (Exception ex) {
 
-	@Override
-	public User get(String email) {
+            logger.error("Not add user.", ex);
+            rollback(connection);
 
-		User user = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		Connection connection = null;
+        } finally {
+            closePreparedStatement(connection, pstmt, null);
+        }
 
-		try {
+    }
 
-			connection = manager.getConnection();
+    @Override
+    public User get(String email) {
 
-			pstmt = connection.prepareStatement(FIND_USER_BY_EMAIL);
-			pstmt.setString(1, email);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				user = unMap(rs);
-			}
-			
-		} catch (Exception e) {
-			logger.error("Not get user.", e);
-			rollback(connection);
-		} finally {
+        User user = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection connection = null;
 
-			closePreparedStatement(connection, pstmt, rs);
+        try {
 
-		}
-		return user;
-	}
+            connection = manager.getConnection();
 
-	@Override
-	public void update(User user) {
+            pstmt = connection.prepareStatement(SELECT_USER_BY_EMAIL);
+            pstmt.setString(1, email);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                user = unMap(rs);
+            }
 
-	}
+        } catch (Exception e) {
+            logger.error("Not get user.", e);
+            rollback(connection);
+        } finally {
 
-	private User unMap(ResultSet rs) throws SQLException {
-		User user = new User();
+            closePreparedStatement(connection, pstmt, rs);
 
-		user.setId(rs.getInt("id"));
-		user.setPassword(rs.getString("password"));
-		user.setEmail(rs.getString("email"));
+        }
+        return user;
+    }
 
-		return user;
-	}
+    @Override
+    public void update(User user) {
+        PreparedStatement pstmt = null;
+        Connection connection = null;
 
-	private void rollback(Connection connection) {
-		try {
+        try {
 
-			if (connection != null) {
-				connection.rollback();
-			}
-		} catch (SQLException e) {
-			logger.trace("Roll back error.");
-		}
-	}
+            connection = manager.getConnection();
 
-	private void closePreparedStatement(Connection connection,
-			PreparedStatement pstmt, ResultSet rs) {
-		try {
-			if (rs != null) {
-				rs.close();
-			}
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			logger.trace("Close error.");
-		}
-	}
+            pstmt = connection.prepareStatement(INSERT_USER);
+            pstmt.setString(1, user.getDropBoxAccessToken());
+            pstmt.setString(2, user.getInstagramAccessToken());
+            pstmt.setString(3, user.getInstagramUserId());
+            pstmt.setString(4, user.getEmail());
 
-	private void closeStatement(Connection connection, Statement stmt,
-			ResultSet rs) {
-		try {
-			if (rs != null) {
-				rs.close();
-			}
-			if (stmt != null) {
-				stmt.close();
-			}
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			logger.trace("Close error.");
-		}
-	}
+            pstmt.executeUpdate();
+
+        } catch (Exception ex) {
+
+            logger.error("Not update user.", ex);
+            rollback(connection);
+
+        } finally {
+            closePreparedStatement(connection, pstmt, null);
+        }
+
+    }
+
+    private User unMap(ResultSet rs) throws SQLException {
+        User user = new User();
+
+        user.setId(rs.getInt("id"));
+        user.setPassword(rs.getString("password"));
+        user.setEmail(rs.getString("email"));
+        user.setDropBoxAccessToken(rs.getString("drop_box_access_token"));
+        user.setInstagramAccessToken(rs.getString("instagram_access_token"));
+        user.setInstagramUserId(rs.getString("instagram_user_id"));
+
+        return user;
+    }
+
+    private void rollback(Connection connection) {
+        try {
+
+            if (connection != null) {
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            logger.trace("Roll back error.");
+        }
+    }
+
+    private void closePreparedStatement(Connection connection,
+                                        PreparedStatement pstmt, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            logger.trace("Close error.");
+        }
+    }
+
+    private void closeStatement(Connection connection, Statement stmt,
+                                ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            logger.trace("Close error.");
+        }
+    }
 }

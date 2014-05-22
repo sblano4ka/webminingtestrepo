@@ -35,7 +35,7 @@ public class InstagramAPI {
         authUrl = url.toString();
     }
 
-    public String getAccessToken(String code) throws IOException {
+    public JSONObject getAuccess(String code) throws IOException {
         HttpPost httpPost = null;
         StringBuilder builder = new StringBuilder();
 
@@ -68,12 +68,7 @@ public class InstagramAPI {
             httpPost.releaseConnection();
 
         }
-        JSONObject jsonObject = new JSONObject(builder.toString());
-
-        JSONObject u = jsonObject.getJSONObject("user");
-        log.info("USER ID -->> " + u.get("id"));
-
-        return jsonObject.get("access_token").toString();
+        return new JSONObject(builder.toString());
     }
 
     public void createSubscriptions(String verifyToken) {
