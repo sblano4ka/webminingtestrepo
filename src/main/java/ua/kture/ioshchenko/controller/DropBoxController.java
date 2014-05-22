@@ -8,12 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.kture.ioshchenko.api.DropBoxAPI;
+import ua.kture.ioshchenko.model.User;
+import ua.kture.ioshchenko.service.UserService;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class DropBoxController {
 
     @Autowired
     private DropBoxAPI dropBoxAPI;
+    @Autowired
+    private UserService userService;
 
 
     @RequestMapping(value = "/dropbox/authorize", method = RequestMethod.GET)
@@ -22,12 +29,16 @@ public class DropBoxController {
     }
 
     @RequestMapping(value = "/dropbox/code", method = RequestMethod.POST)
-    public String getAccessCode(@RequestParam String code, Model model) {
+    public String getAccessCode(@RequestParam String code, Model model, HttpServletRequest request) {
         try {
             String token = dropBoxAPI.getAccessToken(code);
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            user.setDropBoxAccessToken(token);
+            userService.update(user);
             return "redirect:/";
         } catch (DbxException e) {
-            model.addAttribute("error", "Please input correct code from DropBox.");
+            model.addAttribute("message", "Please input correct code from DropBox.");
         }
         return "drop_box_authorize";
     }

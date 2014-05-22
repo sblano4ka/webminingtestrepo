@@ -68,22 +68,12 @@ public class InstagramController {
             stringBuilder.append(br.readLine());
         }
 
-        log.info("JSON -->>  " + stringBuilder.toString());
-
-
         JSONArray jsonArray = new JSONArray(stringBuilder.toString());
 
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
-        log.info("JSON ID -->>  " + jsonObject.get("object_id"));
+        JSONObject jsonObjectId = jsonArray.getJSONObject(0);
+        JSONObject data = jsonObjectId.getJSONObject("data");
 
+        log.info("JSON ID -->>  " + jsonObjectId.get("object_id") + "   media_id " + data.get("media_id"));
     }
-
-
-    @RequestMapping(value = "/instagram/test", method = RequestMethod.GET)
-    public void successTest() {
-        log.info("   TEST  ---->>");
-
-    }
-
 
 }
