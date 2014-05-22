@@ -85,7 +85,7 @@ public class UserDAOImpl implements UserDAO {
 
 			connection = manager.getConnection();
 
-			pstmt = connection.prepareStatement(INSERT_USER);
+			pstmt = connection.prepareStatement(UPDATE_USER);
 			pstmt.setString(1, user.getDropBoxAccessToken());
 			pstmt.setString(2, user.getInstagramAccessToken());
 			pstmt.setString(3, user.getInstagramUserId());
