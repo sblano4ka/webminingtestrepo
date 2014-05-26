@@ -22,21 +22,21 @@ public class ChannelDAOImpl implements ChannelDAO {
     private DBManager manager;
 
     private final String SELECT_ALL_SERVICE_THIS = "SELECT DISTINCT services.id, services.name  " +
-            "FROM services, actions_this" +
-            "WHERE services.id=actions_this.service_id;";
+            " FROM services, actions_this " +
+            " WHERE services.id=actions_this.service_id; ";
 
-    private final String SELECT_ALL_SERVICE_THAT = "SELECT DISTINCT services.id, services.name  " +
-            "FROM services, actions_that" +
-            "WHERE services.id=actions_that.service_id;";
+    private final String SELECT_ALL_SERVICE_THAT = " SELECT DISTINCT services.id, services.name  " +
+            " FROM services, actions_that " +
+            " WHERE services.id=actions_that.service_id; ";
 
-    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THAT = "SELECT DISTINCT actions_that.id, " +
+    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THAT = " SELECT DISTINCT actions_that.id, " +
             " actions_that.name,  actions_that.description" +
-            "FROM services, actions_that" +
-            "WHERE actions_that.service_id=?;";
-    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THIS = "SELECT DISTINCT actions_this.id, " +
-            " actions_this.name,  actions_this.description" +
-            "FROM services, actions_this" +
-            "WHERE actions_this.service_id=?;";
+            " FROM services, actions_that " +
+            " WHERE actions_that.service_id=?; ";
+    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THIS = " SELECT DISTINCT actions_this.id, " +
+            " actions_this.name,  actions_this.description " +
+            " FROM services, actions_this " +
+            " WHERE actions_this.service_id=?; ";
 
 
     @Override
@@ -145,8 +145,8 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     private Channel extractServices(ResultSet rs) throws SQLException {
         Channel service = new Channel();
-        service.setId(rs.getLong("id"));
-        service.setName(rs.getString("name"));
+        service.setId(rs.getLong("services.id"));
+        service.setName(rs.getString("services.name"));
         return service;
     }
 
