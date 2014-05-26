@@ -83,10 +83,6 @@ public class InstagramController {
 
         User user = userService.getUserByInstagramUserId(jsonObjectId.get("object_id").toString());
         String url = instagramEndpoints.getImageUrl(data.get("media_id").toString(), user.getInstagramAccessToken());
-        log.info("URL ---->>> " + url);
-
-
-        log.info("JSON ID -->>  " + jsonObjectId.get("object_id") + "   media_id " + data.get("media_id"));
 
         try {
             dropBoxAPI.uploadFile(url, user.getDropBoxAccessToken());
