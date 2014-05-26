@@ -25,6 +25,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="code" class="col-xs-2 control-label"></label>
+                        <div class="col-xs-10">
+                            <a href="<c:url value="/dropbox/usercode"/>">Get code from DropBox</a>
+                        </div>
+                    </div>
+
                 </fieldset>
                 <input type="submit" class="btn btn-primary center-block" value="Submit"/>
             </form>

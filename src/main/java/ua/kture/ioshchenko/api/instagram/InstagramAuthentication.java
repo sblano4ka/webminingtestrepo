@@ -1,4 +1,4 @@
-package ua.kture.ioshchenko.api;
+package ua.kture.ioshchenko.api.instagram;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class InstagramAPI {
+public class InstagramAuthentication {
     private static final String CLENT_ID = "883cf7e7219848a59b1b0fe295ddf549";
     private static final String CLIENT_SECRET = "9d0585ac55e146e1877e5c1b694ffb64";
     private static final String REDIRECT_URL = "http://fake-ioschenko.rhcloud.com/instagram/accesss";
@@ -25,9 +25,9 @@ public class InstagramAPI {
 
     private String authUrl;
 
-    private Logger log = Logger.getLogger(InstagramAPI.class);
+    private Logger log = Logger.getLogger(InstagramAuthentication.class);
 
-    public InstagramAPI() {
+    public InstagramAuthentication() {
         StringBuilder url = new StringBuilder(
                 "https://api.instagram.com/oauth/authorize/?client_id=");
         url.append(CLENT_ID).append("&redirect_uri=").append(REDIRECT_URL)
@@ -63,7 +63,7 @@ public class InstagramAPI {
             EntityUtils.consume(response.getEntity());
 
         } catch (Exception ex) {
-            log.error("Instagram api", ex);
+            log.error("Instagram api authentication", ex);
         } finally {
             httpPost.releaseConnection();
 

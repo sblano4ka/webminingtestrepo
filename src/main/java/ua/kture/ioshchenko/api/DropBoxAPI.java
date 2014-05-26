@@ -2,9 +2,11 @@ package ua.kture.ioshchenko.api;
 
 
 import com.dropbox.core.*;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 
 @Component
@@ -27,6 +29,25 @@ public class DropBoxAPI {
     public String getAccessToken(String code) throws DbxException {
         DbxAuthFinish authFinish = webAuth.finish(code);
         return authFinish.accessToken;
+    }
+
+    public void uploadFile(String urlImage, String accessToken) throws IOException, DbxException {
+        DbxClient client = new DbxClient(config, accessToken);
+
+        String fileName = urlImage.substring(urlImage.lastIndexOf("/"), urlImage.length());
+        URL url = new URL(urlImage);
+        URLConnection uc = url.openConnection();
+        long contentLenght = uc.getContentLength();
+
+        BufferedInputStream inputStream = new BufferedInputStream(url.openStream());
+        try {
+            DbxEntry.File uploadedFile = client.uploadFile(fileName,
+                    DbxWriteMode.add(), contentLenght, inputStream);
+        } finally {
+            inputStream.close();
+        }
+
+
     }
 
     public String getAuthUrl() {

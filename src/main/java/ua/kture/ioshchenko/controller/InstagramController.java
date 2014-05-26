@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.kture.ioshchenko.api.InstagramAPI;
+import ua.kture.ioshchenko.api.instagram.InstagramAuthentication;
 import ua.kture.ioshchenko.model.User;
 import ua.kture.ioshchenko.service.UserService;
 
@@ -25,14 +25,14 @@ public class InstagramController {
     private Logger log = Logger.getLogger(InstagramController.class);
 
     @Autowired
-    private InstagramAPI instagramAPI;
+    private InstagramAuthentication instagramAuthentication;
     @Autowired
     private UserService userService;
 
 
     @RequestMapping(value = "/instagram/usercode", method = RequestMethod.GET)
     public String getAuthUrl(Model model) {
-        return "redirect:" + instagramAPI.getAuthUrl();
+        return "redirect:" + instagramAuthentication.getAuthUrl();
     }
 
     @RequestMapping(value = "/instagram/accesss", method = RequestMethod.GET)
@@ -43,7 +43,7 @@ public class InstagramController {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
 
-            JSONObject jsonObject = instagramAPI.getAuccess(code);
+            JSONObject jsonObject = instagramAuthentication.getAuccess(code);
             JSONObject userID = jsonObject.getJSONObject("user");
 
             user.setInstagramUserId(userID.getString("id"));
