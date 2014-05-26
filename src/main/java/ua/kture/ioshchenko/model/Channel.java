@@ -1,9 +1,10 @@
 package ua.kture.ioshchenko.model;
 
+import java.util.List;
+
 public class Channel {
     private long id;
     private String name;
-
 
 
     public long getId() {
@@ -21,7 +22,6 @@ public class Channel {
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     @Override

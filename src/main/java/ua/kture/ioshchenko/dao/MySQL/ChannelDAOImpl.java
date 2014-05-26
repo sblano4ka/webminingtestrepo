@@ -1,8 +1,11 @@
-package ua.kture.ioshchenko.dao;
+package ua.kture.ioshchenko.dao.MySQL;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.kture.ioshchenko.dao.ChannelDAO;
+import ua.kture.ioshchenko.dao.ConnectionUtil;
+import ua.kture.ioshchenko.dao.DBManager;
 import ua.kture.ioshchenko.model.Channel;
 import ua.kture.ioshchenko.model.ChannelAction;
 

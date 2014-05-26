@@ -1,8 +1,11 @@
-package ua.kture.ioshchenko.dao;
+package ua.kture.ioshchenko.dao.MySQL;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.kture.ioshchenko.dao.ConnectionUtil;
+import ua.kture.ioshchenko.dao.DBManager;
+import ua.kture.ioshchenko.dao.UserDAO;
 import ua.kture.ioshchenko.model.User;
 
 import java.sql.*;
@@ -16,6 +19,9 @@ public class UserDAOImpl implements UserDAO {
     private final String INSERT_USER = "INSERT INTO users VALUES (default, ?, ?, default, default, default);";
     private final String UPDATE_USER = "UPDATE users SET drop_box_access_token=?, "
             + "instagram_access_token=?, instagram_user_id=? WHERE email=?";
+
+
+    private final String SELECT_USER_INSTAGRAM_USER_ID = "SELECT * FROM users WHERE instagram_user_id=?;";
 
     @Autowired
     private DBManager manager;
@@ -102,6 +108,33 @@ public class UserDAOImpl implements UserDAO {
             ConnectionUtil.closePreparedStatement(connection, pstmt, null);
         }
 
+    }
+
+    @Override
+    public User getUserByInstagramUserId(String instagramUserId) {
+        User user = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection connection = null;
+
+        try {
+
+            connection = manager.getConnection();
+
+            pstmt = connection.prepareStatement(SELECT_USER_INSTAGRAM_USER_ID);
+            pstmt.setString(1, instagramUserId);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                user = unMap(rs);
+            }
+
+        } catch (Exception e) {
+            logger.error("Not get user.", e);
+            ConnectionUtil.rollback(connection);
+        } finally {
+            ConnectionUtil.closePreparedStatement(connection, pstmt, rs);
+        }
+        return user;
     }
 
     private User unMap(ResultSet rs) throws SQLException {

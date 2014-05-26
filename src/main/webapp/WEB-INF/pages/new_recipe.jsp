@@ -14,6 +14,7 @@
     <div class="col-md-8">
         <h1> if <a href="#" id="selectThis" class="btn btn-success" style="font-size: 35px;">this</a> then
             <a href="#" id="selectThat" class="btn btn-success" style="font-size: 35px;">that</a></h1>
+        <p> <a href="#" id="createRecipe" class="btn btn-primary" >Create</a> </p>
     </div>
 
 </div>

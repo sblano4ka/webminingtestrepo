@@ -2,6 +2,25 @@ $(document).ready(function () {
     var recipe = {};
     var triggerChannel;
 
+    $('#createRecipe').click(function () {
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: '/createRecipe',
+            type: 'post',
+            dataType: "json",
+            data: JSON.stringify(recipe),
+            success: function (data) {
+                window.location.href = '/myrecipe';
+            }
+        });
+
+    });
+
+
     // THIS
     $('#selectThis').click(function () {
         $.ajax({
@@ -46,9 +65,8 @@ $(document).ready(function () {
         $(document).on('click', "a.link-trigger-channel-this", function () {
             var id = $(this).attr('id');
             triggerChannel = $(this).text();
-            recipe.serviceThisId = id;
+            recipe.channelThisId = id;
             viewPopupTriggerThis(id);
-            alert(triggerChannel);
         });
     }
 
@@ -97,7 +115,7 @@ $(document).ready(function () {
 
         $(document).on('click', "a.link-trigger-this", function () {
             var id = $(this).attr('id');
-            recipe.serviceActionThisId = id;
+            recipe.channelActionThisId = id;
             $('#selectThis').text(triggerChannel);
             $('#trigger').modal('hide');
             $('#triggerChannel').modal('hide');
@@ -151,9 +169,8 @@ $(document).ready(function () {
         $(document).on('click', "a.link-trigger-channel-that", function () {
             var id = $(this).attr('id');
             triggerChannel = $(this).text();
-            recipe.serviceThatId = id;
+            recipe.channelThatId = id;
             viewPopupTriggerThat(id);
-            alert(triggerChannel);
         });
     }
 
@@ -202,7 +219,7 @@ $(document).ready(function () {
 
         $(document).on('click', "a.link-trigger-that", function () {
             var id = $(this).attr('id');
-            recipe.serviceActionThatId = id;
+            recipe.channelActionThatId = id;
             $('#selectThat').text(triggerChannel);
             $('#trigger').modal('hide');
             $('#triggerChannel').modal('hide');

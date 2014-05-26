@@ -25,4 +25,8 @@ public class UserService {
     public void update(User user) {
         userDAO.update(user);
     }
+
+    public User getUserByInstagramUserId(String instagramUserId) {
+        return userDAO.getUserByInstagramUserId(instagramUserId);
+    }
 }

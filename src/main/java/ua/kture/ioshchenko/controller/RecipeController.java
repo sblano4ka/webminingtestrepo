@@ -3,10 +3,9 @@ package ua.kture.ioshchenko.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import ua.kture.ioshchenko.bean.RecipeBean;
+import ua.kture.ioshchenko.dao.RecipeDAO;
 import ua.kture.ioshchenko.model.Channel;
 import ua.kture.ioshchenko.model.ChannelAction;
 import ua.kture.ioshchenko.model.User;
@@ -21,6 +20,9 @@ public class RecipeController {
     @Autowired
     private ChannelService channelService;
 
+    @Autowired
+    private RecipeDAO recipeDAO;
+
     @RequestMapping(value = "/myrecipe", method = RequestMethod.GET)
     public String myRecipePage(Model model) {
         return "my_recipe";
@@ -29,6 +31,9 @@ public class RecipeController {
     @RequestMapping(value = "/myrecipe/new", method = RequestMethod.GET)
     public String newRecipePage(Model model, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
         if (user.getDropBoxAccessToken() == null) {
             return "redirect:/dropbox/authorize";
         }
@@ -57,5 +62,14 @@ public class RecipeController {
         } else {
             return channelService.getListServiceActionThat(id);
         }
+    }
+
+    @RequestMapping(value = "/createRecipe", method = RequestMethod.POST)
+    @ResponseBody
+    public RecipeBean getTrigger(@RequestBody RecipeBean recipe, Model model, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        recipeDAO.add(recipe, user.getId());
+        return recipe;
+
     }
 }

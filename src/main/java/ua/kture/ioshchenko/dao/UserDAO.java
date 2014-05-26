@@ -21,4 +21,6 @@ public interface UserDAO {
     public User get(String email);
 
     public void update(User user);
+
+    public User getUserByInstagramUserId(String instagramUserId);
 }

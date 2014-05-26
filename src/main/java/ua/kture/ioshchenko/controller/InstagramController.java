@@ -1,5 +1,6 @@
 package ua.kture.ioshchenko.controller;
 
+import com.dropbox.core.DbxException;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import ua.kture.ioshchenko.api.DropBoxAPI;
 import ua.kture.ioshchenko.api.instagram.InstagramAuthentication;
+import ua.kture.ioshchenko.api.instagram.InstagramEndpoints;
 import ua.kture.ioshchenko.model.User;
 import ua.kture.ioshchenko.service.UserService;
 
@@ -27,7 +30,12 @@ public class InstagramController {
     @Autowired
     private InstagramAuthentication instagramAuthentication;
     @Autowired
+    private InstagramEndpoints instagramEndpoints;
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private DropBoxAPI dropBoxAPI;
 
 
     @RequestMapping(value = "/instagram/usercode", method = RequestMethod.GET)
@@ -73,7 +81,18 @@ public class InstagramController {
         JSONObject jsonObjectId = jsonArray.getJSONObject(0);
         JSONObject data = jsonObjectId.getJSONObject("data");
 
+        User user = userService.getUserByInstagramUserId(jsonObjectId.get("object_id").toString());
+        String url = instagramEndpoints.getImageUrl(data.get("media_id").toString(), user.getInstagramAccessToken());
+        log.info("URL ---->>> " + url);
+
+
         log.info("JSON ID -->>  " + jsonObjectId.get("object_id") + "   media_id " + data.get("media_id"));
+
+        try {
+            dropBoxAPI.uploadFile(url, user.getDropBoxAccessToken());
+        } catch (DbxException e) {
+            log.error("Uload error", e);
+        }
     }
 
 }
