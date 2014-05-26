@@ -35,11 +35,15 @@ public class UserDAOImpl implements UserDAO {
 
             connection = manager.getConnection();
 
-            pstmt = connection.prepareStatement(INSERT_USER);
+            pstmt = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, user.getEmail());
             pstmt.setString(2, user.getPassword());
-
             pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                user.setId(rs.getInt(1));
+            }
 
         } catch (Exception ex) {
 
