@@ -47,7 +47,7 @@ $(document).ready(function () {
             }
             popup += '<div class="col-md-4">';
             popup += '<a  class="link-trigger-channel-this" href="#" id="' + item.id + '">';
-            popup += item.name;
+            popup += '<img src="/images/'+item.name+'.png">';
             popup += '</a>';
             popup += '</div>';
 
@@ -64,7 +64,7 @@ $(document).ready(function () {
 
         $(document).on('click', "a.link-trigger-channel-this", function () {
             var id = $(this).attr('id');
-            triggerChannel = $(this).text();
+            triggerChannel = $(this).html();
             recipe.channelThisId = id;
             viewPopupTriggerThis(id);
         });
@@ -116,7 +116,7 @@ $(document).ready(function () {
         $(document).on('click', "a.link-trigger-this", function () {
             var id = $(this).attr('id');
             recipe.channelActionThisId = id;
-            $('#selectThis').text(triggerChannel);
+            $('#selectThis').html(triggerChannel);
             $('#trigger').modal('hide');
             $('#triggerChannel').modal('hide');
         });
@@ -151,7 +151,7 @@ $(document).ready(function () {
             }
             popup += '<div class="col-md-4">';
             popup += '<a  class="link-trigger-channel-that" href="#" id="' + item.id + '">';
-            popup += item.name;
+            popup += '<img src="/images/'+item.name+'.png">';
             popup += '</a>';
             popup += '</div>';
 
@@ -168,7 +168,7 @@ $(document).ready(function () {
 
         $(document).on('click', "a.link-trigger-channel-that", function () {
             var id = $(this).attr('id');
-            triggerChannel = $(this).text();
+            triggerChannel = $(this).html();
             recipe.channelThatId = id;
             viewPopupTriggerThat(id);
         });
@@ -220,7 +220,7 @@ $(document).ready(function () {
         $(document).on('click', "a.link-trigger-that", function () {
             var id = $(this).attr('id');
             recipe.channelActionThatId = id;
-            $('#selectThat').text(triggerChannel);
+            $('#selectThat').html(triggerChannel);
             $('#trigger').modal('hide');
             $('#triggerChannel').modal('hide');
         });

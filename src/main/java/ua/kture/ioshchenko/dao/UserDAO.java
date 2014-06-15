@@ -16,11 +16,11 @@ import ua.kture.ioshchenko.model.User;
 
 
 public interface UserDAO {
-    public void add(User user);
+    void add(User user);
 
-    public User get(String email);
+    User get(String email);
 
-    public void update(User user);
+    void update(User user);
 
-    public User getUserByInstagramUserId(String instagramUserId);
+    User getUserByInstagramUserId(String instagramUserId);
 }

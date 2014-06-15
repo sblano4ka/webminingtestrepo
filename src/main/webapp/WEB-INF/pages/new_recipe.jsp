@@ -5,7 +5,7 @@
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
 <%@ include file="/WEB-INF/jspf/navbar.jspf" %>
-<script type="text/javascript" src="<c:url value='/js/recipe.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/new_recipe.js' />"></script>
 
 <div class="row" id="content">
     <div class="well">
@@ -14,12 +14,12 @@
     <div class="col-md-8">
         <h1> if <a href="#" id="selectThis" class="btn btn-success" style="font-size: 35px;">this</a> then
             <a href="#" id="selectThat" class="btn btn-success" style="font-size: 35px;">that</a></h1>
-        <p> <a href="#" id="createRecipe" class="btn btn-primary" >Create</a> </p>
+
+        <p><a href="#" id="createRecipe" class="btn btn-primary">Create</a></p>
     </div>
 
 </div>
-<!--/row-->
-<%@ include file="/WEB-INF/jspf/footer.jspf" %>
+
 </body>
 
 <!-- Modal Choose Trigger Channel -->
@@ -54,4 +54,6 @@
 </div>
 
 </html>
+
+
 

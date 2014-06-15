@@ -1,4 +1,4 @@
-package ua.kture.ioshchenko.api;
+package ua.kture.ioshchenko.api.dropbox;
 
 
 import com.dropbox.core.*;

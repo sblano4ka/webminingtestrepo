@@ -8,8 +8,10 @@ import ua.kture.ioshchenko.bean.RecipeBean;
 import ua.kture.ioshchenko.dao.RecipeDAO;
 import ua.kture.ioshchenko.model.Channel;
 import ua.kture.ioshchenko.model.ChannelAction;
+import ua.kture.ioshchenko.model.Recipe;
 import ua.kture.ioshchenko.model.User;
 import ua.kture.ioshchenko.service.ChannelService;
+import ua.kture.ioshchenko.service.RecipeService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ public class RecipeController {
     private ChannelService channelService;
 
     @Autowired
-    private RecipeDAO recipeDAO;
+    private RecipeService recipeService;
+
 
     @RequestMapping(value = "/myrecipe", method = RequestMethod.GET)
     public String myRecipePage(Model model) {
@@ -68,8 +71,15 @@ public class RecipeController {
     @ResponseBody
     public RecipeBean getTrigger(@RequestBody RecipeBean recipe, Model model, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
-        recipeDAO.add(recipe, user.getId());
+        recipeService.add(recipe, user);
         return recipe;
-
     }
+
+    @RequestMapping(value = "/getUserRecipes", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Recipe> getUserRecipes(Model model, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        return recipeService.getUserRecipes(user);
+    }
+
 }

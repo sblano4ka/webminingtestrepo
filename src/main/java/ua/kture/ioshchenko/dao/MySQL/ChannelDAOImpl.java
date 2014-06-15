@@ -24,22 +24,28 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Autowired
     private DBManager manager;
 
-    private final String SELECT_ALL_SERVICE_THIS = "SELECT DISTINCT services.id, services.name  " +
+    private static final String SELECT_ALL_SERVICE_THIS = "SELECT DISTINCT services.id, services.name  " +
             " FROM services, actions_this " +
             " WHERE services.id=actions_this.service_id; ";
 
-    private final String SELECT_ALL_SERVICE_THAT = " SELECT DISTINCT services.id, services.name  " +
+    private static final String SELECT_ALL_SERVICE_THAT = " SELECT DISTINCT services.id, services.name  " +
             " FROM services, actions_that " +
             " WHERE services.id=actions_that.service_id; ";
 
-    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THAT = " SELECT DISTINCT actions_that.id, " +
+    private static final String SELECT_ALL_SERVICE_ACTION_BY_ID_SERVICE_THAT = " SELECT DISTINCT actions_that.id, " +
             " actions_that.name,  actions_that.description" +
             " FROM services, actions_that " +
             " WHERE actions_that.service_id=?; ";
-    private final String SELECT_SERVICE_ACTION_BY_ID_SERVICE_THIS = " SELECT DISTINCT actions_this.id, " +
+    private static final String SELECT_ALL_SERVICE_ACTION_BY_ID_SERVICE_THIS = " SELECT DISTINCT actions_this.id, " +
             " actions_this.name,  actions_this.description " +
             " FROM services, actions_this " +
             " WHERE actions_this.service_id=?; ";
+
+    private static final String SELECT_SERVICE_BY_ID = "SELECT services.id, services.name FROM services WHERE id=?;";
+
+    private static final String SELECT_SERVICE_ACTION_THAT_BY_ID = "SELECT *  FROM actions_that WHERE id=?;";
+
+    private static final String SELECT_SERVICE_ACTION_THIS_BY_ID = "SELECT *  FROM actions_this WHERE id=?;";
 
 
     @Override
@@ -54,7 +60,7 @@ public class ChannelDAOImpl implements ChannelDAO {
             pstmt = connection.prepareStatement(SELECT_ALL_SERVICE_THIS);
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                list.add(extractServices(rs));
+                list.add(extractService(rs));
             }
 
         } catch (Exception e) {
@@ -80,7 +86,7 @@ public class ChannelDAOImpl implements ChannelDAO {
             pstmt = connection.prepareStatement(SELECT_ALL_SERVICE_THAT);
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                list.add(extractServices(rs));
+                list.add(extractService(rs));
             }
 
         } catch (Exception e) {
@@ -102,7 +108,7 @@ public class ChannelDAOImpl implements ChannelDAO {
         PreparedStatement pstmt = null;
         try {
             connection = manager.getConnection();
-            pstmt = connection.prepareStatement(SELECT_SERVICE_ACTION_BY_ID_SERVICE_THAT);
+            pstmt = connection.prepareStatement(SELECT_ALL_SERVICE_ACTION_BY_ID_SERVICE_THAT);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -128,7 +134,7 @@ public class ChannelDAOImpl implements ChannelDAO {
         PreparedStatement pstmt = null;
         try {
             connection = manager.getConnection();
-            pstmt = connection.prepareStatement(SELECT_SERVICE_ACTION_BY_ID_SERVICE_THIS);
+            pstmt = connection.prepareStatement(SELECT_ALL_SERVICE_ACTION_BY_ID_SERVICE_THIS);
             pstmt.setLong(1, id);
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -145,8 +151,80 @@ public class ChannelDAOImpl implements ChannelDAO {
         return list;
     }
 
+    @Override
+    public Channel getChanel(long id) {
+        Channel channel = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = manager.getConnection();
+            pstmt = connection.prepareStatement(SELECT_SERVICE_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                channel = extractService(rs);
+            }
 
-    private Channel extractServices(ResultSet rs) throws SQLException {
+        } catch (Exception e) {
+            logger.error("Get  service by id", e);
+            ConnectionUtil.rollback(connection);
+        } finally {
+            ConnectionUtil.closePreparedStatement(connection, pstmt, rs);
+        }
+        return channel;
+    }
+
+    @Override
+    public ChannelAction getChanelActionThis(long id) {
+        ChannelAction channelAction = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = manager.getConnection();
+            pstmt = connection.prepareStatement(SELECT_SERVICE_ACTION_THIS_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                channelAction = extractServiceActions(rs);
+            }
+
+        } catch (Exception e) {
+            logger.error("Get  service action by id", e);
+            ConnectionUtil.rollback(connection);
+        } finally {
+            ConnectionUtil.closePreparedStatement(connection, pstmt, rs);
+        }
+        return channelAction;
+    }
+
+    @Override
+    public ChannelAction getChanelActionThat(long id) {
+        ChannelAction channelAction = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = manager.getConnection();
+            pstmt = connection.prepareStatement(SELECT_SERVICE_ACTION_THAT_BY_ID);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                channelAction = extractServiceActions(rs);
+            }
+
+        } catch (Exception e) {
+            logger.error("Get  service action by id", e);
+            ConnectionUtil.rollback(connection);
+        } finally {
+            ConnectionUtil.closePreparedStatement(connection, pstmt, rs);
+        }
+        return channelAction;
+    }
+
+
+    private Channel extractService(ResultSet rs) throws SQLException {
         Channel service = new Channel();
         service.setId(rs.getLong("services.id"));
         service.setName(rs.getString("services.name"));

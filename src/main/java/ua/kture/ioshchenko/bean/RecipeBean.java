@@ -1,10 +1,19 @@
 package ua.kture.ioshchenko.bean;
 
 public class RecipeBean {
+    private long id;
     private long channelThisId;
     private long channelActionThisId;
     private long channelThatId;
     private long channelActionThatId;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getChannelThisId() {
         return channelThisId;

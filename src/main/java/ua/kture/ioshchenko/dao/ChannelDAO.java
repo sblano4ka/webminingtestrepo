@@ -6,11 +6,19 @@ import ua.kture.ioshchenko.model.ChannelAction;
 import java.util.List;
 
 public interface ChannelDAO {
-    public List<Channel> getAllServiceThis();
+    List<Channel> getAllServiceThis();
 
-    public List<Channel> getAllServiceThat();
+    List<Channel> getAllServiceThat();
 
-    public List<ChannelAction> getListServiceActionThat(long id);
+    List<ChannelAction> getListServiceActionThat(long id);
 
-    public List<ChannelAction> getListServiceActionThis(long id);
+    List<ChannelAction> getListServiceActionThis(long id);
+
+
+    Channel getChanel(long id);
+
+    ChannelAction getChanelActionThis(long id);
+
+    ChannelAction getChanelActionThat(long id);
+
 }

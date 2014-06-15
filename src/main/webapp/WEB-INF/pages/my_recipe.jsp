@@ -5,20 +5,20 @@
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
 <%@ include file="/WEB-INF/jspf/navbar.jspf" %>
+<script type="text/javascript" src="<c:url value='/js/my_recipe.js' />"></script>
 <div class="row" id="content">
-    <div class="jumbotron">
-        <h1>My recipe</h1>
 
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a
-            jumbotron and three supporting pieces of content. Use it as a starting point to create something more
-            unique.</p>
+    <div class="row">
+        <div class="jumbotron">
+            <h1>My recipes</h1>
+        </div>
 
-        <p>
+        <div class="list-recipes">
+
+        </div>
     </div>
 </div>
-<!--/row-->
 
-<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>
 

@@ -38,9 +38,7 @@
         </div>
     </div>
 </div>
-<!--/row-->
 
-<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>
 

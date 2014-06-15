@@ -8,9 +8,8 @@
 
 
 <div class="starter-template">
-    <h1>token</h1>
+    <h1>Welcome to Mesh-up services!</h1>
 </div>
 
-<%@ include file="/WEB-INF/jspf/footer.jspf" %>
 </body>
 </html>
