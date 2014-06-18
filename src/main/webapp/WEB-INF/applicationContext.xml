@@ -27,40 +27,19 @@
     <context:component-scan base-package="ua.kture.ioshchenko.model"/>
 
 
-    <!-- connect to database -->
-    <!-- <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-    </bean> -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-       <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://127.2.121.130:3306/fake"/>
+        <property name="username" value="adminW1zQSF6"/>
+        <property name="password" value="Qlj-rNRBvLyu"/>
 
-<!--
-          <property name="url" value="jdbc:mysql://127.2.121.130:3306/fake"/>
-         <property name="username" value="adminW1zQSF6"/>
-         <property name="password" value="Qlj-rNRBvLyu"/>-->
-
-
-
-         <property name="url" value="jdbc:mysql://127.0.0.1:3306/fake"/>
-        <property name="username" value="user"/>
-        <property name="password" value="qwerty"/>
+        <!--         <property name="url" value="jdbc:mysql://127.0.0.1:3306/fake"/>
+                <property name="username" value="user"/>
+                <property name="password" value="qwerty"/>-->
 
 
     </bean>
 
-    <!-- <tx:annotation-driven transaction-manager="transactionManager"/>
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean> -->
-
-    <!--<jdbc:initialize-database data-source="dataSource">
-        <jdbc:script location="classpath:legacy.sql"/>
-    </jdbc:initialize-database>-->
 
 </beans>
 

@@ -26,9 +26,6 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-    @Autowired
-    private UserService userService;
-
 
     @RequestMapping(value = "/myrecipe", method = RequestMethod.GET)
     public String myRecipePage(Model model) {
@@ -81,7 +78,7 @@ public class RecipeController {
 
     @RequestMapping(value = "/getUserRecipes", method = RequestMethod.GET)
     @ResponseBody
-    public List<Recipe> getUserRecipes(@RequestParam(required=false) String email, Model model, HttpServletRequest request) {
+    public List<Recipe> getUserRecipes(@RequestParam(required = false) String email, Model model, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         return recipeService.getUserRecipes(user);
     }
