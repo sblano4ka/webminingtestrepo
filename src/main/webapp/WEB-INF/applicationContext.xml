@@ -38,16 +38,16 @@
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
 
-
+<!--
           <property name="url" value="jdbc:mysql://127.2.121.130:3306/fake"/>
          <property name="username" value="adminW1zQSF6"/>
-         <property name="password" value="Qlj-rNRBvLyu"/>
+         <property name="password" value="Qlj-rNRBvLyu"/>-->
 
 
 
-<!--         <property name="url" value="jdbc:mysql://127.0.0.1:3306/fake"/>
+         <property name="url" value="jdbc:mysql://127.0.0.1:3306/fake"/>
         <property name="username" value="user"/>
-        <property name="password" value="qwerty"/> -->
+        <property name="password" value="qwerty"/>
 
 
     </bean>
